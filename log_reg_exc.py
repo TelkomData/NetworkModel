@@ -57,6 +57,7 @@ def load_exchange(exc, x_sum=True, y_loc = True, train_size=0.8, random_state=42
 
 	# get data in right format
 	df = pd.read_csv(exc+'.csv')
+	
 	if x_sum:
 		x_data = x_sum_features(df)
 	else:

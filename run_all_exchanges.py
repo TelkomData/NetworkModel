@@ -11,6 +11,7 @@ def main(options):
 
     exchanges = [file_name.split('.csv')[0].split('\\')[1] for file_name in glob.glob(FLAGS.data_dir+'*.csv')]
 
+    models = {}
     for exc in exchanges:
         print ('Building model for {:s}'.format(exc))
         save_files_to = FLAGS.data_dir + 'models/' + exc +'/'
@@ -19,10 +20,10 @@ def main(options):
         tf.gfile.MakeDirs(save_files_to)
 
 
-        X_train, X_test, y_train, y_test = load_exchange(FLAGS.data_dir + exc, x_sum=False, y_loc=True)
-
-        models = {}
+        X_train, X_test, y_train, y_test = load_exchange(FLAGS.data_dir + exc, x_sum=False, y_loc=False)
+        
         models[exc] = train(X_train, X_test, y_train, y_test, 
+            levels = {},
             model_name=exc, 
             n_step=FLAGS.n_step, 
             learning_rate = FLAGS.learning_rate,
