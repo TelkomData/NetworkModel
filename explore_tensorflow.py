@@ -2,6 +2,8 @@
 import tensorflow as tf
 from tensorflow.python.framework import ops
 
+#hfgjhgjf
+
 def variable_summaries(var):
     """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
     with tf.name_scope('summaries'):
