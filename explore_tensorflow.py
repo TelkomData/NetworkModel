@@ -32,36 +32,36 @@ def nn_layer(input_tensor, num_features, num_classes, layer_name, act=tf.nn.relu
             variable_summaries(activations)
         return activations
 
-def multi_layer_nn(X, Y, model_name, levels = {}, learning_rate=0.1):
+# def multi_layer_nn(X, Y, model_name, levels = {}, learning_rate=0.1):
 
-    num_features = X.shape[1]
-    if len(Y.shape) == 1:
-        num_classes = 1
-    else:
-        num_classes = Y.shape[1]
-    previous_nodes = num_features
+#     num_features = X.shape[1]
+#     if len(Y.shape) == 1:
+#         num_classes = 1
+#     else:
+#         num_classes = Y.shape[1]
+#     previous_nodes = num_features
 
-    with tf.name_scope(model_name):
-        X = tf.placeholder(tf.float32, [None, num_features])
-        Y = tf.placeholder(tf.float32, [None, num_classes])
+#     with tf.name_scope(model_name):
+#         X = tf.placeholder(tf.float32, [None, num_features])
+#         Y = tf.placeholder(tf.float32, [None, num_classes])
         
-        for k, v in levels.items():
-            v = {'nodes': v}
-            v[model] = nn_layer(X, previous_nodes, v['nodes'], k, tf.nn.relu)
-            previous_nodes = v['nodes']
+#         for k, v in levels.items():
+#             v = {'nodes': v}
+#             v[model] = nn_layer(X, previous_nodes, v['nodes'], k, tf.nn.relu)
+#             previous_nodes = v['nodes']
 
-        if num_classes == 1:
-            y_hat = nn_layer(level1, previous, num_classes, model_name, tf.sigmoid)
-            cost = tf.reduce_mean(-Y * tf.log(y_hat) - (1-Y) * tf.log(1-y_hat))
-            pred = tf.equal(Y, tf.cast(y_hat>0.5, tf.float32))        
-        else:
-            y_hat = nn_layer(X, num_features, num_classes, model_name, tf.identity)
-            cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y_hat, labels=Y))
-            pred = tf.equal(tf.argmax(Y, 1), tf.argmax(y_hat, 1))
+#         if num_classes == 1:
+#             y_hat = nn_layer(X, previous, num_classes, model_name, tf.sigmoid)
+#             cost = tf.reduce_mean(-Y * tf.log(y_hat) - (1-Y) * tf.log(1-y_hat))
+#             pred = tf.equal(Y, tf.cast(y_hat>0.5, tf.float32))        
+#         else:
+#             y_hat = nn_layer(X, num_features, num_classes, model_name, tf.identity)
+#             cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y_hat, labels=Y))
+#             pred = tf.equal(tf.argmax(Y, 1), tf.argmax(y_hat, 1))
 
-        train_step = tf.train.AdamOptimizer(learning_rate).minimize(cost)
-        accuracy = tf.reduce_mean(tf.cast(pred, tf.float32))
-        return train_step, cost, accuracy
+#         train_step = tf.train.AdamOptimizer(learning_rate).minimize(cost)
+#         accuracy = tf.reduce_mean(tf.cast(pred, tf.float32))
+#         return train_step, cost, accuracy
 
 def train(X_train, X_test, y_train, y_test, model_name, levels = {}, learning_rate=0.1, n_step = 100, max_steps = 1000, save_file=None): 
 
@@ -79,17 +79,17 @@ def train(X_train, X_test, y_train, y_test, model_name, levels = {}, learning_ra
     X = tf.placeholder(tf.float32, [None, num_features])
     Y = tf.placeholder(tf.float32, [None, num_classes])
     
-    for k, v in levels.items():
-        v = {'nodes': v}
-        v[model] = nn_layer(X, previous_nodes, v['nodes'], k, tf.nn.relu)
-        previous_nodes = v['nodes']
+    # for k, v in levels.items():
+    #     v = {'nodes': v}
+    #     v[model] = nn_layer(X, previous_nodes, v['nodes'], k, tf.nn.relu)
+    #     previous_nodes = v['nodes']
 
     if num_classes == 1:
-        y_hat = nn_layer(level1, previous, num_classes, 'final', tf.sigmoid)
+        y_hat = nn_layer(X, num_features, num_classes, model_name, tf.sigmoid)
         cost = tf.reduce_mean(-Y * tf.log(y_hat) - (1-Y) * tf.log(1-y_hat))
         pred = tf.equal(Y, tf.cast(y_hat>0.5, tf.float32))        
     else:
-        y_hat = nn_layer(X, num_features, num_classes, 'final', tf.identity)
+        y_hat = nn_layer(X, num_features, num_classes, model_name, tf.identity)
         cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y_hat, labels=Y))
         pred = tf.equal(tf.argmax(Y, 1), tf.argmax(y_hat, 1))
 

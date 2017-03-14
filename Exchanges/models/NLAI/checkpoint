@@ -1,0 +1,2 @@
+model_checkpoint_path: "NLAI.ckpt"
+all_model_checkpoint_paths: "NLAI.ckpt"
